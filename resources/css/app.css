@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    }
+
+    body {
+        @apply text-slate-900;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
