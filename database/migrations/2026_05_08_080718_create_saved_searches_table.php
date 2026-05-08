@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('saved_searches', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->json('filters');
             $table->timestamps();
         });
     }

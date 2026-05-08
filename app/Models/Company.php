@@ -48,4 +48,11 @@ class Company extends Model
     {
         return $this->hasMany(Property::class);
     }
+
+    public function getDisplayLocationAttribute(): string
+    {
+        return collect([$this->city, $this->state, $this->country])
+            ->filter()
+            ->implode(', ');
+    }
 }

@@ -64,6 +64,36 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Property::class);
     }
 
+    public function savedSearches(): HasMany
+    {
+        return $this->hasMany(SavedSearch::class);
+    }
+
+    public function recentSearches(): HasMany
+    {
+        return $this->hasMany(RecentSearch::class);
+    }
+
+    public function assignedLeads(): HasMany
+    {
+        return $this->hasMany(Lead::class, 'assigned_to_user_id');
+    }
+
+    public function brokerLeads(): HasMany
+    {
+        return $this->hasMany(Lead::class, 'broker_user_id');
+    }
+
+    public function receivedInquiries(): HasMany
+    {
+        return $this->hasMany(Inquiry::class, 'recipient_user_id');
+    }
+
+    public function adminActionLogs(): HasMany
+    {
+        return $this->hasMany(AdminActionLog::class, 'admin_user_id');
+    }
+
     public function isRole(UserRole|string $role): bool
     {
         return $this->role?->value === ($role instanceof UserRole ? $role->value : $role);

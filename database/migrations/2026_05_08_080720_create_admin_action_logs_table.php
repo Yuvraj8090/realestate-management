@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('admin_action_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('admin_user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('action');
+            $table->string('target_type');
+            $table->unsignedBigInteger('target_id')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
+
+            $table->index(['target_type', 'target_id']);
         });
     }
 

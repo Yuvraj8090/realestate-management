@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('recent_searches', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('label')->nullable();
+            $table->json('filters');
+            $table->timestamp('last_used_at')->nullable();
             $table->timestamps();
+
+            $table->index(['user_id', 'last_used_at']);
         });
     }
 
