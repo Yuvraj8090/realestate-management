@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Property;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -89,55 +90,23 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function admin(): View
+    public function admin(): RedirectResponse
     {
-        return view('placeholders.coming-soon', [
-            'title' => 'Admin User Management',
-            'description' => 'This protected space will become the command center for moderation, approvals, and platform-wide controls.',
-            'items' => [
-                'Approve or reject company verification requests with audit notes.',
-                'Suspend suspicious owners, brokers, or firms without deleting their data.',
-                'Review flagged listings before they appear publicly.',
-            ],
-        ]);
+        return redirect()->route('admin.properties.index');
     }
 
-    public function company(): View
+    public function company(): RedirectResponse
     {
-        return view('placeholders.coming-soon', [
-            'title' => 'Company Listing Workspace',
-            'description' => 'This area is reserved for verified real estate firms and will expand into a full property operations panel.',
-            'items' => [
-                'Create listings under the company brand with unified media and pricing.',
-                'Track draft, published, sold, and rented inventory.',
-                'Invite staff members under the same company account structure.',
-            ],
-        ]);
+        return redirect()->route('properties.manage');
     }
 
-    public function owner(): View
+    public function owner(): RedirectResponse
     {
-        return view('placeholders.coming-soon', [
-            'title' => 'Owner Property Workspace',
-            'description' => 'This owner-only area will support direct property management without relying on a brokerage firm.',
-            'items' => [
-                'Manage self-listed homes for rent, sale, and short stays.',
-                'Control pricing, availability, and media updates in one dashboard.',
-                'Review incoming leads and contact requests from prospects.',
-            ],
-        ]);
+        return redirect()->route('properties.manage');
     }
 
-    public function broker(): View
+    public function broker(): RedirectResponse
     {
-        return view('placeholders.coming-soon', [
-            'title' => 'Broker Lead Workspace',
-            'description' => 'This broker-only area will grow into the lead and client management center for agents.',
-            'items' => [
-                'Manage broker-listed inventory across multiple property owners.',
-                'Track inquiries, site visits, and negotiations with clients.',
-                'Organize buyer and tenant pipelines around active properties.',
-            ],
-        ]);
+        return redirect()->route('leads.index');
     }
 }

@@ -12,20 +12,23 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="border-amber-500 text-slate-900 focus:border-amber-500 focus:text-slate-900">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('properties.index')" :active="request()->routeIs('properties.index') || request()->routeIs('properties.show')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
+                        {{ __('Browse Properties') }}
+                    </x-nav-link>
                     @if (Auth::user()->isRole(\App\Enums\UserRole::SuperAdmin))
-                        <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.*')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
+                        <x-nav-link :href="route('admin.properties.index')" :active="request()->routeIs('admin.*')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
                             {{ __('Admin Panel') }}
                         </x-nav-link>
                     @elseif (Auth::user()->isRole(\App\Enums\UserRole::Company))
-                        <x-nav-link :href="route('company.properties')" :active="request()->routeIs('company.*')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
+                        <x-nav-link :href="route('properties.manage')" :active="request()->routeIs('properties.manage') || request()->routeIs('properties.create') || request()->routeIs('properties.edit')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
                             {{ __('Company Listings') }}
                         </x-nav-link>
                     @elseif (Auth::user()->isRole(\App\Enums\UserRole::Broker))
-                        <x-nav-link :href="route('broker.leads')" :active="request()->routeIs('broker.*')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
+                        <x-nav-link :href="route('leads.index')" :active="request()->routeIs('leads.*')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
                             {{ __('Broker Leads') }}
                         </x-nav-link>
                     @else
-                        <x-nav-link :href="route('owner.properties')" :active="request()->routeIs('owner.*')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
+                        <x-nav-link :href="route('properties.manage')" :active="request()->routeIs('properties.manage') || request()->routeIs('properties.create') || request()->routeIs('properties.edit')" class="border-amber-500 text-slate-600 hover:text-slate-900 focus:border-amber-500 focus:text-slate-900">
                             {{ __('My Properties') }}
                         </x-nav-link>
                     @endif
@@ -83,21 +86,24 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('properties.index')" :active="request()->routeIs('properties.index') || request()->routeIs('properties.show')">
+                {{ __('Browse Properties') }}
+            </x-responsive-nav-link>
 
             @if (Auth::user()->isRole(\App\Enums\UserRole::SuperAdmin))
-                <x-responsive-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.*')">
+                <x-responsive-nav-link :href="route('admin.properties.index')" :active="request()->routeIs('admin.*')">
                     {{ __('Admin Panel') }}
                 </x-responsive-nav-link>
             @elseif (Auth::user()->isRole(\App\Enums\UserRole::Company))
-                <x-responsive-nav-link :href="route('company.properties')" :active="request()->routeIs('company.*')">
+                <x-responsive-nav-link :href="route('properties.manage')" :active="request()->routeIs('properties.manage') || request()->routeIs('properties.create') || request()->routeIs('properties.edit')">
                     {{ __('Company Listings') }}
                 </x-responsive-nav-link>
             @elseif (Auth::user()->isRole(\App\Enums\UserRole::Broker))
-                <x-responsive-nav-link :href="route('broker.leads')" :active="request()->routeIs('broker.*')">
+                <x-responsive-nav-link :href="route('leads.index')" :active="request()->routeIs('leads.*')">
                     {{ __('Broker Leads') }}
                 </x-responsive-nav-link>
             @else
-                <x-responsive-nav-link :href="route('owner.properties')" :active="request()->routeIs('owner.*')">
+                <x-responsive-nav-link :href="route('properties.manage')" :active="request()->routeIs('properties.manage') || request()->routeIs('properties.create') || request()->routeIs('properties.edit')">
                     {{ __('My Properties') }}
                 </x-responsive-nav-link>
             @endif

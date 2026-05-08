@@ -3,47 +3,63 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PropertyController;
+use App\Http\Requests\StorePropertyRequest;
+use App\Http\Requests\UpdatePropertyRequest;
+use App\Models\Property;
+use App\Services\PropertyImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PropertyApiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        //
+        $filters = collect($request->all())
+            ->only([
+                'search', 'property_type', 'listing_type', 'status', 'city', 'locality', 'postal_code',
+                'min_price', 'max_price', 'min_bedrooms', 'min_bathrooms', 'min_area', 'max_area',
+                'has_parking', 'has_pool', 'has_air_conditioning', 'is_furnished', 'has_gym', 'has_security', 'pets_allowed',
+            ])->filter(fn ($value) => $value !== null && $value !== '')
+            ->all();
+
+        $properties = Property::query()
+            ->with(['images', 'user', 'company'])
+            ->publiclyVisible()
+            ->applyFilters($filters)
+            ->applySort($request->string('sort')->toString())
+            ->paginate(12)
+            ->withQueryString();
+
+        return response()->json($properties);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StorePropertyRequest $request, PropertyImageService $propertyImageService): JsonResponse
     {
-        //
+        $controller = app(PropertyController::class);
+        $response = $controller->store($request, $propertyImageService);
+
+        return response()->json(['message' => 'Property created successfully.'], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Property $property): JsonResponse
     {
-        //
+        return response()->json($property->load(['images', 'user', 'company', 'inquiries', 'leads']));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdatePropertyRequest $request, Property $property, PropertyImageService $propertyImageService): JsonResponse
     {
-        //
+        $controller = app(PropertyController::class);
+        $controller->update($request, $property, $propertyImageService);
+
+        return response()->json(['message' => 'Property updated successfully.']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Property $property, PropertyImageService $propertyImageService): JsonResponse
     {
-        //
+        $controller = app(PropertyController::class);
+        $controller->destroy($property, $propertyImageService);
+
+        return response()->json(['message' => 'Property deleted successfully.']);
     }
 }
