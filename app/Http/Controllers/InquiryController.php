@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\LeadStatus;
 use App\Enums\UserRole;
 use App\Http\Requests\StoreInquiryRequest;
+use App\Http\Resources\InquiryResource;
 use App\Models\Inquiry;
 use App\Models\Lead;
 use App\Models\Property;
@@ -42,7 +43,7 @@ class InquiryController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Inquiry submitted successfully.',
-                'inquiry_id' => $inquiry->id,
+                'inquiry' => new InquiryResource($inquiry->load(['property', 'recipient'])),
             ], 201);
         }
 

@@ -6,6 +6,7 @@ use App\Enums\PropertyModerationStatus;
 use App\Enums\PropertyStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkModerationRequest;
+use App\Http\Resources\PropertyResource;
 use App\Models\Property;
 use App\Models\PropertyReport;
 use App\Notifications\PropertyModerationStatusChangedNotification;
@@ -35,9 +36,27 @@ class PropertyModerationController extends Controller
 
         if ($request->expectsJson()) {
             return response()->json([
-                'properties' => $properties,
-                'logs' => $logs,
-                'reports' => $openReports,
+                'properties' => PropertyResource::collection($properties)->response()->getData(true),
+                'logs' => $logs->map(fn ($log) => [
+                    'id' => $log->id,
+                    'action' => $log->action,
+                    'target_type' => $log->target_type,
+                    'target_id' => $log->target_id,
+                    'meta' => $log->meta,
+                    'created_at' => $log->created_at?->toISOString(),
+                ])->values(),
+                'reports' => $openReports->map(fn ($report) => [
+                    'id' => $report->id,
+                    'property_id' => $report->property_id,
+                    'reason' => $report->reason,
+                    'details' => $report->details,
+                    'created_at' => $report->created_at?->toISOString(),
+                    'property' => $report->property ? [
+                        'id' => $report->property->id,
+                        'slug' => $report->property->slug,
+                        'title' => $report->property->title,
+                    ] : null,
+                ])->values(),
             ]);
         }
 
@@ -62,7 +81,7 @@ class PropertyModerationController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Property moderation updated.',
-                'property' => $property->fresh(['reviewer']),
+                'property' => new PropertyResource($property->fresh(['images', 'user.company', 'company', 'reviewer'])),
             ]);
         }
 

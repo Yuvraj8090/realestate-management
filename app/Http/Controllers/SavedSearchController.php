@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveSearchRequest;
+use App\Http\Resources\SavedSearchResource;
 use App\Models\SavedSearch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +16,7 @@ class SavedSearchController extends Controller
         $savedSearch = $request->user()->savedSearches()->create($request->validated());
 
         if ($request->expectsJson()) {
-            return response()->json($savedSearch, 201);
+            return response()->json(new SavedSearchResource($savedSearch), 201);
         }
 
         return back()->with('status', 'Search saved successfully.');

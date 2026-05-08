@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Http\Requests\UpdateLeadRequest;
+use App\Http\Resources\LeadResource;
 use App\Models\Lead;
 use App\Services\AdminActionLogger;
 use Illuminate\Contracts\View\View;
@@ -37,7 +38,7 @@ class LeadController extends Controller
         $leads = $query->latest()->paginate(12)->withQueryString();
 
         if ($request->expectsJson()) {
-            return response()->json($leads);
+            return LeadResource::collection($leads);
         }
 
         return view('leads.index', [
@@ -80,7 +81,7 @@ class LeadController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Lead updated successfully.',
-                'lead' => $lead->load(['notes.user', 'assignee']),
+                'lead' => new LeadResource($lead->load(['property.images', 'inquiry.property', 'broker', 'assignee', 'notes.user'])),
             ]);
         }
 
