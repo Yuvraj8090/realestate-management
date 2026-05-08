@@ -6,8 +6,8 @@ use App\Enums\PropertyListingSource;
 use App\Enums\PropertyListingType;
 use App\Enums\PropertyStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Property extends Model
 {

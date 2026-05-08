@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $superAdmin = User::factory()->create([
+        User::factory()->create([
             'name' => 'Platform Super Admin',
             'email' => 'admin@realestatemanagement.test',
             'role' => UserRole::SuperAdmin,
@@ -40,13 +40,13 @@ class DatabaseSeeder extends Seeder
             'state' => 'Maharashtra',
         ]);
 
-        $owner = User::factory()->create([
+        User::factory()->create([
             'name' => 'Owner Demo',
             'email' => 'owner@realestatemanagement.test',
             'role' => UserRole::PropertyOwner,
         ]);
 
-        $broker = User::factory()->create([
+        User::factory()->create([
             'name' => 'Broker Demo',
             'email' => 'broker@realestatemanagement.test',
             'role' => UserRole::Broker,

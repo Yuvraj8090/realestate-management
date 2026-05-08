@@ -23,9 +23,9 @@ class DashboardController extends Controller
         };
 
         $publishedProperties = match ($user->role) {
-            UserRole::SuperAdmin => Property::where('status', PropertyStatus::Published)->count(),
-            UserRole::Company => $user->company?->properties()->where('status', PropertyStatus::Published)->count() ?? 0,
-            default => $user->properties()->where('status', PropertyStatus::Published)->count(),
+            UserRole::SuperAdmin => Property::where('status', PropertyStatus::Published->value)->count(),
+            UserRole::Company => $user->company?->properties()->where('status', PropertyStatus::Published->value)->count() ?? 0,
+            default => $user->properties()->where('status', PropertyStatus::Published->value)->count(),
         };
 
         $stats = match ($user->role) {
@@ -33,24 +33,24 @@ class DashboardController extends Controller
                 ['label' => 'Registered users', 'value' => User::count()],
                 ['label' => 'Verified companies', 'value' => Company::where('verification_status', 'verified')->count()],
                 ['label' => 'Live properties', 'value' => $publishedProperties],
-                ['label' => 'Listings in draft', 'value' => Property::where('status', PropertyStatus::Draft)->count()],
+                ['label' => 'Listings in draft', 'value' => Property::where('status', PropertyStatus::Draft->value)->count()],
             ],
             UserRole::Company => [
                 ['label' => 'Company listings', 'value' => $totalProperties],
                 ['label' => 'Published listings', 'value' => $publishedProperties],
-                ['label' => 'Draft listings', 'value' => $user->company?->properties()->where('status', PropertyStatus::Draft)->count() ?? 0],
+                ['label' => 'Draft listings', 'value' => $user->company?->properties()->where('status', PropertyStatus::Draft->value)->count() ?? 0],
                 ['label' => 'Verification status', 'value' => str($user->company?->verification_status?->value ?? 'pending')->headline()],
             ],
             UserRole::Broker => [
                 ['label' => 'Broker-managed listings', 'value' => $totalProperties],
                 ['label' => 'Published listings', 'value' => $publishedProperties],
-                ['label' => 'Draft listings', 'value' => $user->properties()->where('status', PropertyStatus::Draft)->count()],
+                ['label' => 'Draft listings', 'value' => $user->properties()->where('status', PropertyStatus::Draft->value)->count()],
                 ['label' => 'Client module', 'value' => 'Coming soon'],
             ],
             UserRole::PropertyOwner => [
                 ['label' => 'Owner listings', 'value' => $totalProperties],
                 ['label' => 'Published listings', 'value' => $publishedProperties],
-                ['label' => 'Draft listings', 'value' => $user->properties()->where('status', PropertyStatus::Draft)->count()],
+                ['label' => 'Draft listings', 'value' => $user->properties()->where('status', PropertyStatus::Draft->value)->count()],
                 ['label' => 'Inquiry inbox', 'value' => 'Coming soon'],
             ],
         };
